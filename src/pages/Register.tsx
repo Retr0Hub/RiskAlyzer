@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import type { Sex, UserProfile } from '../types/user'
+import type { Sex, SmokingStatus, UserProfile } from '../types/user'
 import { useAuth } from '../auth/AuthContext'
 import { saveUserProfile } from '../lib/firestoreProfile'
 import { formatFirestoreError } from '../lib/firebaseErrors'
@@ -12,7 +12,7 @@ function defaultsFromProfile(
   displayName: string
   age: string
   sex: Sex
-  smoker: boolean
+  smokingStatus: SmokingStatus
   familyIllness: boolean
 } {
   if (!p) {
@@ -21,7 +21,7 @@ function defaultsFromProfile(
       displayName: hint,
       age: '30',
       sex: 'male',
-      smoker: false,
+      smokingStatus: 'never',
       familyIllness: false,
     }
   }
@@ -29,7 +29,7 @@ function defaultsFromProfile(
     displayName: p.displayName,
     age: String(p.age),
     sex: p.sex,
-    smoker: p.smoker,
+    smokingStatus: p.smokingStatus,
     familyIllness: p.familyIllness,
   }
 }
@@ -45,7 +45,7 @@ export function Register({ initialProfile }: { initialProfile: UserProfile | nul
   const [displayName, setDisplayName] = useState(init.displayName)
   const [age, setAge] = useState(init.age)
   const [sex, setSex] = useState<Sex>(init.sex)
-  const [smoker, setSmoker] = useState(init.smoker)
+  const [smokingStatus, setSmokingStatus] = useState<SmokingStatus>(init.smokingStatus)
   const [familyIllness, setFamilyIllness] = useState(init.familyIllness)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
@@ -70,7 +70,7 @@ export function Register({ initialProfile }: { initialProfile: UserProfile | nul
       displayName: n,
       age: a,
       sex,
-      smoker,
+      smokingStatus,
       familyIllness,
       registeredAt: initialProfile?.registeredAt ?? new Date().toISOString(),
     }
@@ -170,12 +170,37 @@ export function Register({ initialProfile }: { initialProfile: UserProfile | nul
           </fieldset>
 
           <div className="space-y-4">
-            <ToggleRow
-              label="Do you smoke?"
-              description="Tobacco use is a major risk factor in population models."
-              checked={smoker}
-              onChange={setSmoker}
-            />
+            <fieldset>
+              <legend className="text-xs font-semibold uppercase tracking-wider text-slate-500">Smoking Status</legend>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {(
+                  [
+                    ['never', 'Never smoked'],
+                    ['previously', 'Previously smoked'],
+                    ['active', 'Currently smoking'],
+                  ] as const
+                ).map(([value, label]) => (
+                  <label
+                    key={value}
+                    className={`cursor-pointer rounded-xl border px-4 py-2.5 text-sm font-medium transition ${
+                      smokingStatus === value
+                        ? 'border-sky-500/60 bg-white/70 text-sky-950 shadow-sm'
+                        : 'border-white/50 bg-white/35 text-slate-600 hover:border-white/70 hover:bg-white/50'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="smokingStatus"
+                      className="sr-only"
+                      checked={smokingStatus === value}
+                      onChange={() => setSmokingStatus(value)}
+                    />
+                    {label}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+            
             <ToggleRow
               label="Family history of serious illness?"
               description="Placeholder flag for hereditary risk — refine with your clinician."

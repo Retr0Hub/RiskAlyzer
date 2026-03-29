@@ -4,11 +4,12 @@ import { useFirestoreUserProfile } from './hooks/useFirestoreUserProfile'
 import { LoadingScreen } from './components/LoadingScreen'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
+import { Settings } from './pages/Settings'
 import { Dashboard } from './pages/Dashboard'
 
 function AppRoutes() {
   const { user, authReady, firebaseConfigured } = useAuth()
-  const { profile, loading: profileLoading } = useFirestoreUserProfile(user?.uid)
+  const { profile, loading: profileLoading, error: profileError } = useFirestoreUserProfile(user?.uid)
 
   if (!authReady) {
     return <LoadingScreen label="Starting…" />
@@ -32,13 +33,20 @@ function AppRoutes() {
     )
   }
 
+  // If profile is still loading, show loading screen
   if (profileLoading) {
     return <LoadingScreen label="Syncing your profile…" />
+  }
+
+  // If profile loading failed, log and direct to register
+  if (profileError) {
+    console.error('[Riskalyzer] Profile load error:', profileError)
   }
 
   return (
     <Routes>
       <Route path="/register" element={<Register initialProfile={profile} />} />
+      <Route path="/settings" element={profile ? <Settings initialProfile={profile} /> : <Navigate to="/register" replace />} />
       <Route
         path="/dashboard"
         element={profile ? <Dashboard profile={profile} /> : <Navigate to="/register" replace />}

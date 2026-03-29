@@ -7,6 +7,7 @@ import { useGeolocation } from '../hooks/useGeolocation'
 import { useEnvironmentData, weatherLabel } from '../hooks/useEnvironmentData'
 import type { GeoState } from '../hooks/useGeolocation'
 import { WeatherMotionBackdrop } from '../components/WeatherMotionBackdrop'
+import { UserMenu } from '../components/UserMenu'
 
 function aqiBand(aqi: number | null): { label: string; className: string } {
   if (aqi == null) return { label: 'No data', className: 'text-slate-400' }
@@ -184,8 +185,8 @@ export function Dashboard({ profile }: { profile: UserProfile }) {
                 <QuickTile
                   icon={<IconFlame />}
                   title="Smoking"
-                  value={profile.smoker ? 'Yes' : 'No'}
-                  warn={profile.smoker}
+                  value={profile.smokingStatus === 'active' ? 'Active' : profile.smokingStatus === 'previously' ? 'Previously' : 'Never'}
+                  warn={profile.smokingStatus === 'active'}
                 />
                 <QuickTile
                   icon={<IconDna />}
@@ -375,12 +376,7 @@ function DashboardHeader({ profile, geo }: { profile: UserProfile; geo: GeoState
             <span className="text-slate-400">⏱</span>
             {timer}
           </div>
-          <div
-            className="flex size-10 items-center justify-center rounded-full border border-white/55 bg-gradient-to-br from-sky-400 to-indigo-400 text-sm font-bold text-white shadow-md"
-            title={profile.displayName}
-          >
-            {profile.displayName.slice(0, 1).toUpperCase()}
-          </div>
+          <UserMenu profile={profile} align="right" />
         </div>
       </div>
     </header>
@@ -550,30 +546,97 @@ function RiskGlassPanel({
 }) {
   return (
     <div className="rounded-2xl border border-white/55 bg-white/35 p-5 shadow-lg backdrop-blur-xl md:p-6">
-      <h2 className="font-display text-base font-semibold text-slate-800">Risk factors &amp; model</h2>
-      <ul className="mt-3 space-y-2 text-sm">
-        <li className="flex justify-between border-b border-white/30 py-2">
-          <span className="text-slate-600">Smoking</span>
-          <span className="font-medium text-slate-900">{profile.smoker ? 'Yes' : 'No'}</span>
-        </li>
-        <li className="flex justify-between border-b border-white/30 py-2">
-          <span className="text-slate-600">Family illness flag</span>
-          <span className="font-medium text-slate-900">{profile.familyIllness ? 'Yes' : 'No'}</span>
-        </li>
-      </ul>
-      <p className="mt-4 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-        Adjustments (yrs)
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="font-display text-base font-semibold text-slate-800">Risk Factors & Adjustments</h2>
+        <Link
+          to="/settings"
+          className="text-xs font-semibold text-sky-700 hover:text-sky-900 transition"
+        >
+          Edit →
+        </Link>
+      </div>
+      
+      <div className="space-y-3 mb-5">
+        <RiskFactorRow
+          label="Smoking status"
+          value={profile.smokingStatus === 'active' ? 'Active smoker' : profile.smokingStatus === 'previously' ? 'Previously smoked' : 'Never smoked'}
+          risk={profile.smokingStatus === 'active'}
+          description={profile.smokingStatus === 'active' ? 
+            'Active smoking significantly reduces life expectancy' : 
+            profile.smokingStatus === 'previously' ?
+            'Previously smoking has moderate impact on health expectations' :
+            'Great! Keep it up.'}
+        />
+        <RiskFactorRow
+          label="Family history"
+          value={profile.familyIllness ? 'History of illness' : 'No known risk'}
+          risk={profile.familyIllness}
+          description={profile.familyIllness ? 
+            'Family history can increase risk for hereditary conditions' : 
+            'No significant genetic risk factors indicated.'}
+        />
+      </div>
+
+      <div className="border-t border-white/30 pt-4">
+        <p className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+          Life Expectancy Adjustments
+        </p>
+        <ul className="space-y-2 text-sm">
+          {expectancy.adjustments.map((a) => (
+            <li key={a.label} className="flex justify-between items-center gap-4 pb-2 last:pb-0">
+              <span className="text-slate-600">{a.label}</span>
+              <span className={`font-semibold tabular-nums px-3 py-1 rounded-full text-xs ${
+                a.years < 0 
+                  ? 'bg-amber-100/60 text-amber-900' 
+                  : a.years > 0 
+                  ? 'bg-emerald-100/60 text-emerald-900'
+                  : 'bg-slate-100/60 text-slate-700'
+              }`}>
+                {a.years > 0 ? `+${a.years}y` : a.years === 0 ? '—' : `${a.years}y`}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <p className="mt-4 text-[10px] text-slate-500 italic">
+        All estimates are illustrative and for educational purposes only — not medical advice.
       </p>
-      <ul className="mt-2 space-y-1 text-sm text-slate-700">
-        {expectancy.adjustments.map((a) => (
-          <li key={a.label} className="flex justify-between gap-4 tabular-nums">
-            <span className="text-slate-600">{a.label}</span>
-            <span className={a.years < 0 ? 'font-medium text-amber-700' : 'font-medium text-slate-900'}>
-              {a.years > 0 ? `+${a.years}` : a.years === 0 ? '—' : a.years}
-            </span>
-          </li>
-        ))}
-      </ul>
+    </div>
+  )
+}
+
+function RiskFactorRow({
+  label,
+  value,
+  risk,
+  description,
+}: {
+  label: string
+  value: string
+  risk: boolean
+  description: string
+}) {
+  return (
+    <div className={`rounded-xl border p-3 backdrop-blur-sm transition ${
+      risk
+        ? 'border-amber-200/80 bg-amber-50/45'
+        : 'border-emerald-200/80 bg-emerald-50/45'
+    }`}>
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">{label}</p>
+          <p className={`mt-1 font-semibold ${
+            risk ? 'text-amber-900' : 'text-emerald-900'
+          }`}>
+            {value}
+          </p>
+        </div>
+        <span className="text-lg">
+          {risk ? '⚠️' : '✓'}
+        </span>
+      </div>
+      <p className="mt-2 text-xs text-slate-600">{description}</p>
     </div>
   )
 }

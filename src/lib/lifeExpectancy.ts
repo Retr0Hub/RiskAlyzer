@@ -21,9 +21,12 @@ export function estimateLifeExpectancyYears(
     adjustments.push({ label: 'Sex (population avg.)', years: 0 })
   }
 
-  if (profile.smoker) {
+  if (profile.smokingStatus === 'active') {
     const y = -8
-    adjustments.push({ label: 'Smoking', years: y })
+    adjustments.push({ label: 'Smoking (active)', years: y })
+  } else if (profile.smokingStatus === 'previously') {
+    const y = -2
+    adjustments.push({ label: 'Smoking (previously)', years: y })
   }
   if (profile.familyIllness) {
     const y = -3

@@ -14,6 +14,9 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  updateEmail,
+  updatePassword,
+  sendPasswordResetEmail,
   type User,
 } from 'firebase/auth'
 import { getAuthInstance, isFirebaseConfigured } from '../lib/firebase'
@@ -26,6 +29,9 @@ type AuthContextValue = {
   registerWithEmail: (email: string, password: string) => Promise<void>
   loginWithGoogle: () => Promise<void>
   logout: () => Promise<void>
+  updateUserEmail: (newEmail: string) => Promise<void>
+  updateUserPassword: (newPassword: string) => Promise<void>
+  resetPassword: (email: string) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
@@ -69,6 +75,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await signOut(getAuthInstance())
   }, [])
 
+  const updateUserEmail = useCallback(async (newEmail: string) => {
+    if (!isFirebaseConfigured()) throw new Error('Firebase not configured')
+    const auth = getAuthInstance()
+    if (!auth.currentUser) throw new Error('No user signed in')
+    await updateEmail(auth.currentUser, newEmail)
+  }, [])
+
+  const updateUserPassword = useCallback(async (newPassword: string) => {
+    if (!isFirebaseConfigured()) throw new Error('Firebase not configured')
+    const auth = getAuthInstance()
+    if (!auth.currentUser) throw new Error('No user signed in')
+    await updatePassword(auth.currentUser, newPassword)
+  }, [])
+
+  const resetPassword = useCallback(async (email: string) => {
+    if (!isFirebaseConfigured()) throw new Error('Firebase not configured')
+    await sendPasswordResetEmail(getAuthInstance(), email)
+  }, [])
+
   const value = useMemo<AuthContextValue>(
     () => ({
       user,
@@ -78,8 +103,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       registerWithEmail,
       loginWithGoogle,
       logout,
+      updateUserEmail,
+      updateUserPassword,
+      resetPassword,
     }),
-    [user, authReady, loginWithEmail, registerWithEmail, loginWithGoogle, logout]
+    [user, authReady, loginWithEmail, registerWithEmail, loginWithGoogle, logout, updateUserEmail, updateUserPassword, resetPassword]
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
