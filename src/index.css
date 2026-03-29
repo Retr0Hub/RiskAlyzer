@@ -1,0 +1,91 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Outfit', var(--font-sans);
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+/* Soft “cloud” pulses — complements Tailwind layers on the page */
+@keyframes riskalyzer-float {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate(12px, -8px) scale(1.03);
+    opacity: 1;
+  }
+}
+
+.riskalyzer-cloud {
+  animation: riskalyzer-float 18s ease-in-out infinite;
+}
+
+.riskalyzer-cloud-delay {
+  animation-delay: -6s;
+}
+
+@keyframes weather-rain {
+  0% {
+    background-position: 210px 0;
+  }
+  100% {
+    background-position: 0 210px;
+  }
+}
+
+@keyframes weather-snow {
+  0% {
+    transform: translateY(-10%) translateX(0);
+  }
+  100% {
+    transform: translateY(110vh) translateX(24px);
+  }
+}
+
+@keyframes weather-flash {
+  0%,
+  92%,
+  100% {
+    opacity: 0;
+  }
+  93% {
+    opacity: 0.55;
+  }
+  94% {
+    opacity: 0.05;
+  }
+  95% {
+    opacity: 0.35;
+  }
+}
+
+.weather-rain-layer {
+  animation: weather-rain 6s linear infinite;
+  background-image: repeating-linear-gradient(
+    -12deg,
+    rgba(255, 255, 255, 0.18) 0,
+    rgba(255, 255, 255, 0.18) 1px,
+    transparent 1px,
+    transparent 12px
+  );
+}
+
+.weather-rain-heavy {
+  animation-duration: 3.2s;
+  opacity: 0.95;
+}
+
+.weather-snowflake {
+  animation: weather-snow linear infinite;
+}
