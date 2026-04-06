@@ -1,231 +1,196 @@
-# BreathSense - Health Risk Assessment Dashboard
+# BreathSense — AI-Powered Personal Health Risk Dashboard
 
-A modern health risk assessment application built with React, TypeScript, Vite, and Firebase. Features real-time environmental data integration, AI-powered health insights using Claude Anthropic API, and a comprehensive user profile system.
+> **Real-time environmental monitoring + ESP biometric sensor + Gemini AI health insights**
+
+[![Firebase Hosting](https://img.shields.io/badge/Live-Firebase%20Hosting-orange?logo=firebase)](https://breathsense-app.web.app)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite)](https://vitejs.dev/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+---
+
+## 📸 Overview
+
+BreathSense is a glassmorphic health risk dashboard that streams data from an ESP32 breath sensor, pairs it with live air-quality / weather data, and feeds everything into **Google Gemini 2.5 Flash** for real-time personalised health insights — all within a beautiful weather-app–inspired UI.
+
+---
 
 ## ✨ Features
 
-- **Dashboard**: Real-time weather, AQI, and health metrics visualization
-- **AI Health Analysis**: Claude-powered health insights based on biometric and environmental data
-- **User Authentication**: Email/password and Google OAuth login
-- **Profile Management**: Comprehensive health profile with age, sex, smoking status, and family history
-- **Two-Factor Authentication**: Enhanced security for user accounts
-- **Environmental Integration**: Real-time air quality and weather data from current location
-- **Responsive Design**: Glass-morphic UI with Tailwind CSS
+| Feature | Description |
+|---|---|
+| 🌬️ **ESP Sensor Integration** | Reads breath rate (BPM) & exhaled breath temperature from connected ESP32 |
+| 🤖 **Gemini AI Analysis** | Auto-triggers on value change (debounced 1.2 s); displays risk score, insights, recommendations |
+| 💬 **AI Health Chat** | Full multi-turn chatbot with live dashboard context; quick-prompt chips; ⌘J shortcut |
+| 🌍 **Live Environment Data** | AQI, PM2.5, PM10, temperature, humidity via Open-Meteo (free, no key required) |
+| 📍 **Location Search** | Weather-app–style city search dropdown; GPS auto-locate; refreshable |
+| 📊 **Trends Analytics** | 6 SVG charts — area, bar — with gridlines, y-axis labels, stable `useMemo` data |
+| 🔐 **Auth** | Email/password + Google OAuth via Firebase Authentication |
+| 🧬 **Health Profile** | Age, sex, smoking status, family history — stored in Firestore |
+| ⚙️ **Settings** | Profile editor + password change + 2FA |
+| 🎨 **Premium UI** | Glassmorphism, WeatherMotionBackdrop, circular gauges, animated FAB |
+
+---
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: React 18, TypeScript, Vite
-- **Styling**: Tailwind CSS, custom animations
-- **Backend**: Firebase (Auth, Firestore, Cloud Functions)
-- **AI**: Anthropic Claude API
-- **APIs**: OpenWeather, Geolocation API
+| Layer | Technology |
+|---|---|
+| Frontend | React 19, TypeScript 5.9, Vite 8 |
+| Styling | Tailwind CSS 4, custom CSS animations |
+| Auth & DB | Firebase Auth + Firestore |
+| Hosting | Firebase Hosting |
+| AI | Google Gemini 2.5 Flash (`generativelanguage.googleapis.com`) |
+| Environment | Open-Meteo Air Quality API + Weather API (free, no key) |
+| Geocoding | Open-Meteo Geocoding API |
 
-## 📋 Prerequisites
-
-- Node.js (v20 or later recommended)
-- npm or yarn
-- Firebase account
-- Anthropic API key
-- OpenWeather API key (for weather/AQI data)
+---
 
 ## 🚀 Getting Started
 
-### 1. **Clone and Install Dependencies**
+### Prerequisites
+
+- Node.js ≥ 20
+- A Firebase project (Auth + Firestore enabled)
+- A Google Gemini API key → [aistudio.google.com](https://aistudio.google.com)
+
+### 1 — Clone & install
 
 ```bash
-git clone <repository-url>
-cd BreathSense
+git clone https://github.com/Retr0Hub/RiskAlyzer.git
+cd RiskAlyzer
 npm install
 ```
 
-### 2. **Setup Environment Variables**
+### 2 — Environment variables
 
-Create a `.env` file in the root directory with your Firebase config:
+Copy the example and fill in your values:
+
+```bash
+cp .env.example .env
+```
 
 ```env
-VITE_FIREBASE_API_KEY=your_firebase_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
-VITE_FIREBASE_PROJECT_ID=your_firebase_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
-VITE_FIREBASE_MESSAGING_SENDER_ID=your_firebase_messaging_sender_id
-VITE_FIREBASE_APP_ID=your_firebase_app_id
-VITE_OPENWEATHER_API_KEY=your_openweather_api_key
+# Firebase
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
+
+# Google Gemini  (AI health analysis + chatbot)
+VITE_GEMINI_API_KEY=
 ```
 
-### 3. **Setup Cloud Functions**
+> ⚠️ **Never commit your `.env` file.** It is listed in `.gitignore`.  
+> For production, set these as Firebase Hosting environment variables or use a backend proxy.
 
-Navigate to the functions directory and install dependencies:
+### 3 — Run locally
 
 ```bash
-cd functions
-npm install
+npm run dev        # http://localhost:5173
 ```
 
-Create `functions/.env` file with your Anthropic API key:
-
-```env
-ANTHROPIC_API_KEY=your_anthropic_api_key
-```
-
-Build the Cloud Functions:
+### 4 — Deploy
 
 ```bash
-npm run build
+npm run build      # TypeScript compile + Vite bundle → dist/
+firebase deploy --only hosting
 ```
 
-### 4. **Deploy Cloud Functions to Firebase**
-
-From the project root:
-
-```bash
-firebase deploy --only functions
-```
-
-This deploys the health analysis backend that proxies requests to the Anthropic API with proper CORS handling.
-
-### 5. **Run Development Server**
-
-From the root directory:
-
-```bash
-npm run dev
-```
-
-The application will be available at `http://localhost:5173`
+---
 
 ## 📁 Project Structure
 
 ```
+RiskAlyzer/
 ├── src/
-│   ├── pages/           # React page components (Dashboard, Login, Register, Settings, Landing)
-│   ├── components/      # Reusable components (LoadingScreen, UserMenu, etc.)
-│   ├── hooks/           # Custom React hooks (useFirestoreUserProfile, useEnvironmentData, etc.)
-│   ├── lib/             # Utility functions (Firebase config, profile codec, etc.)
-│   ├── auth/            # Authentication context
-│   ├── types/           # TypeScript type definitions
-│   ├── App.tsx          # Main app with routing
-│   └── main.tsx         # React entry point
-├── functions/
-│   ├── src/index.ts     # Cloud Function for health analysis (Express HTTP endpoint)
-│   ├── package.json     # Functions dependencies
-│   └── tsconfig.json    # TypeScript config for functions
-├── public/              # Static assets
-├── firebase.json        # Firebase configuration
-└── vite.config.ts       # Vite configuration
+│   ├── pages/
+│   │   ├── Dashboard.tsx      # Main dashboard (stats, AI, ESP, environment, trends)
+│   │   ├── Landing.tsx        # Marketing page
+│   │   ├── Login.tsx
+│   │   ├── Register.tsx
+│   │   └── Settings.tsx       # Profile + security settings
+│   ├── components/
+│   │   ├── Chatbot.tsx        # Full Gemini AI chat with health context
+│   │   ├── Visualizations.tsx # CircularGauge + SparkTrendline
+│   │   ├── UserMenu.tsx
+│   │   └── WeatherMotionBackdrop.tsx
+│   ├── hooks/
+│   │   ├── useEnvironmentData.ts   # Open-Meteo weather + air quality + geocoding
+│   │   ├── useGeolocation.ts
+│   │   ├── useFirestoreUserProfile.ts
+│   │   └── useRiskModel.ts         # Gemini AI health analysis hook
+│   ├── lib/
+│   │   ├── firebase.ts
+│   │   ├── lifeExpectancy.ts       # Life expectancy adjustment model
+│   │   └── profileCodec.ts
+│   ├── auth/AuthContext.tsx
+│   ├── types/user.ts
+│   ├── App.tsx                # Routing
+│   └── main.tsx
+├── functions/                 # Firebase Cloud Functions (optional backend)
+├── public/
+├── firebase.json
+├── .env.example
+└── vite.config.ts
 ```
 
-## 🔧 Available Scripts
+---
 
-### Root Directory
+## 💻 Scripts
 
 ```bash
-npm run dev          # Start development server
-npm run build        # Production build
-npm run preview      # Preview production build locally
-npm run lint         # Run ESLint
+npm run dev          # Vite dev server (HMR)
+npm run build        # tsc -b && vite build
+npm run preview      # Preview production build
+npm run lint         # ESLint
+npm run deploy:firestore   # Deploy Firestore security rules
 ```
 
-### Functions Directory
+---
 
-```bash
-cd functions
-npm run build        # Compile TypeScript to JavaScript
-npm run deploy       # Deploy functions using Firebase CLI
-npm run serve        # Run functions locally with emulator
-npm run logs         # View Cloud Function logs
-```
+## 🔧 ESP32 Integration
 
-## 🔐 Security Notes
+Currently the ESP sensor inputs are simulated via sliders (`Simulation Inputs`) when the device toggle is set to **ONLINE & STREAMING**. Planned real integration:
 
-- **Environment Variables**: Never commit `.env.local` or `.env` files with real API keys to version control
-- **Cloud Functions**: The `analyzeHealth` function proxies Anthropic API calls with proper CORS headers
-- **Firebase Security**: User data is protected by Firestore security rules and Firebase Authentication
+1. **Web Bluetooth API** — browser pairs directly with ESP32 BLE GATT
+2. **WebSocket** — ESP streams JSON `{ bpm, tempC }` to a local WS server
 
-## 📱 Usage
+The AI analysis auto-triggers (debounced 1.2 s) whenever slider values change, so swapping the slider for real sensor callbacks requires no other UI changes.
 
-### First Time Users
-1. Click "Get Started" on the landing page
-2. Create account (email/password or Google OAuth)
-3. Complete health profile with personal information
-4. Dashboard will display health insights based on your data
+---
 
-### Dashboard Features
-- **Health Cards**: View age-adjusted life expectancy, BMI insights, and risk factors
-- **Environmental Data**: Real-time AQI, weather, and air quality metrics
-- **AI Analysis**: Claude analyzes your health profile and provides personalized insights
-- **Recommendations**: View preventive health recommendations based on your profile
+## 🔐 Security
 
-### Account Settings
-- **Profile Tab**: Edit personal health information
-- **Security Tab**: Update password, manage 2FA
-- **Account Actions**: View account details and manage connected services
+Please see [SECURITY.md](SECURITY.md) for our vulnerability reporting policy.
 
-## 🐛 Troubleshooting
+**Quick notes:**
+- `VITE_*` env vars are embedded in the JS bundle at build time — treat the Gemini key as a client-side key with limited scope where possible, or migrate calls to a Cloud Function.
+- Firestore rules restrict each user to reading/writing only their own document.
+- Firebase Auth handles all credential storage; no passwords are handled by the app.
 
-### Cloud Functions Deployment Issues
-
-**Error: "ANTHROPIC_API_KEY not configured"**
-- Ensure `functions/.env` has the correct API key
-- Run `firebase deploy --only functions` again
-
-**Error: "CORS policy blocked request"**
-- Cloud Functions must be deployed for CORS proxy to work
-- Check Firebase Console → Cloud Functions for deployment status
-
-### Local Development Issues
-
-**Port 5173 already in use**
-```bash
-npm run dev -- --port 3000
-```
-
-**Firebase emulator connection issues**
-- Ensure Firebase CLI is installed: `npm install -g firebase-tools`
-- Run `firebase login` to authenticate
-
-## 📝 Firebase Setup
-
-1. Create a Firebase project at [console.firebase.google.com](https://console.firebase.google.com)
-2. Enable Authentication (Email/Password and Google OAuth)
-3. Create a Firestore database (production mode)
-4. Add your domain to authorized domains in Authentication settings
-5. Deploy Firestore security rules: `firebase deploy --only firestore`
+---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please ensure:
-- Code is properly formatted (ESLint passes)
-- TypeScript compiles without errors
-- New features include appropriate type definitions
+1. Fork the repo and create a feature branch
+2. Ensure `npx tsc -b` exits cleanly
+3. Ensure `npm run lint` passes
+4. Open a PR with a clear description
+
+---
 
 ## 📄 License
 
-[Add your license here]
+This project is licensed under the **MIT License** — see [LICENSE](LICENSE) for details.
+
+---
 
 ## 📞 Support
 
-For issues and questions, please create an issue in the repository.
-import reactDom from 'eslint-plugin-react-dom'
+Open an issue at [github.com/Retr0Hub/RiskAlyzer/issues](https://github.com/Retr0Hub/RiskAlyzer/issues).
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-# BreathSense
+> This application provides **illustrative, educational health estimates only** — it is not a medical device and should not be used for clinical decisions.
