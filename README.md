@@ -12,7 +12,7 @@
 
 ## 📸 Overview
 
-BreathSense is a glassmorphic health risk dashboard that streams data from an ESP32 breath sensor, pairs it with live air-quality / weather data, and feeds everything into **Google Gemini 2.5 Flash** for real-time personalised health insights — all within a beautiful weather-app–inspired UI.
+BreathSense is a health risk dashboard that streams data from an ESP32 breath sensor, pairs it with live air-quality / weather data, and feeds everything into **Google Gemini 2.5 Flash** for real-time personalised health insights.
 
 ---
 
