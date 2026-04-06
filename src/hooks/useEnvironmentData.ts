@@ -13,6 +13,8 @@ export interface WeatherCurrent {
 export interface AirCurrent {
   usAqi: number | null
   pm25: number | null
+  pm10: number | null
+  hourlyAqi: number[] | null  // last 12 hours of AQI readings
   time: string
 }
 
@@ -54,7 +56,7 @@ async function reverseGeocode(lat: number, lon: number): Promise<string | null> 
   const res = await fetch(url, {
     headers: {
       Accept: 'application/json',
-      'User-Agent': 'RiskalyzerDashboard/1.0 (local dev; contact: local)',
+      'User-Agent': 'BreathSenseDashboard/1.0 (local dev; contact: local)',
     },
   })
   if (!res.ok) return null
@@ -106,10 +108,15 @@ export function useEnvironmentData(geo: GeoState) {
           `?latitude=${latitude}&longitude=${longitude}` +
           `&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,is_day` +
           `&wind_speed_unit=kmh&timezone=auto`
+
+        // Fetch current air quality + pm10 + hourly AQI for the past 24h
         const airUrl =
           `https://air-quality-api.open-meteo.com/v1/air-quality` +
           `?latitude=${latitude}&longitude=${longitude}` +
-          `&current=us_aqi,pm2_5&timezone=auto`
+          `&current=us_aqi,pm2_5,pm10` +
+          `&hourly=us_aqi` +
+          `&timezone=auto` +
+          `&forecast_days=1`
 
         const [wRes, aRes, place] = await Promise.all([
           fetch(weatherUrl),
@@ -133,12 +140,26 @@ export function useEnvironmentData(geo: GeoState) {
         let air: AirCurrent | null = null
         if (aRes.ok) {
           const aJson = (await aRes.json()) as {
-            current: { time: string; us_aqi?: number; pm2_5?: number }
+            current: { time: string; us_aqi?: number; pm2_5?: number; pm10?: number }
+            hourly?: { time: string[]; us_aqi?: number[] }
           }
           const c = aJson.current
+          // Get last 12 valid hourly AQI readings up to current time
+          let hourlyAqi: number[] | null = null
+          if (aJson.hourly?.us_aqi) {
+            const now = new Date()
+            const validReadings = aJson.hourly.us_aqi
+              .slice(0, 24) // take first 24 (today)
+              .filter((v): v is number => v != null && v >= 0)
+            hourlyAqi = validReadings.slice(-12)
+            if (hourlyAqi.length < 2) hourlyAqi = null
+            void now // suppress unused var
+          }
           air = {
             usAqi: c.us_aqi ?? null,
             pm25: c.pm2_5 ?? null,
+            pm10: c.pm10 ?? null,
+            hourlyAqi,
             time: c.time,
           }
         }

@@ -26,19 +26,19 @@ export function Landing() {
           }}
         />
         <div
-          className="riskalyzer-cloud absolute -left-24 top-[6%] h-64 w-80 rounded-full blur-3xl"
+          className="BreathSense-cloud absolute -left-24 top-[6%] h-64 w-80 rounded-full blur-3xl"
           style={{ background: 'radial-gradient(circle, rgba(186,230,253,0.6) 0%, transparent 70%)' }}
         />
         <div
-          className="riskalyzer-cloud riskalyzer-cloud-delay absolute right-[-5%] top-[3%] h-56 w-72 rounded-full blur-3xl"
+          className="BreathSense-cloud BreathSense-cloud-delay absolute right-[-5%] top-[3%] h-56 w-72 rounded-full blur-3xl"
           style={{ background: 'radial-gradient(circle, rgba(199,210,254,0.5) 0%, transparent 70%)' }}
         />
         <div
-          className="riskalyzer-cloud absolute left-[30%] top-[55%] h-48 w-96 rounded-full blur-3xl"
+          className="BreathSense-cloud absolute left-[30%] top-[55%] h-48 w-96 rounded-full blur-3xl"
           style={{ background: 'radial-gradient(circle, rgba(224,242,254,0.45) 0%, transparent 70%)' }}
         />
         <div
-          className="riskalyzer-cloud riskalyzer-cloud-delay absolute right-[10%] bottom-[15%] h-40 w-64 rounded-full blur-3xl"
+          className="BreathSense-cloud BreathSense-cloud-delay absolute right-[10%] bottom-[15%] h-40 w-64 rounded-full blur-3xl"
           style={{ background: 'radial-gradient(circle, rgba(221,214,254,0.4) 0%, transparent 70%)' }}
         />
       </div>
@@ -58,11 +58,10 @@ function Navbar({ scrollY, menuOpen, setMenuOpen }: { scrollY: number; menuOpen:
   const navSolid = scrollY > 40
   return (
     <nav
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        navSolid
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${navSolid
           ? 'border-b border-white/40 bg-white/60 shadow-[0_4px_30px_-4px_rgba(14,116,144,0.10)] backdrop-blur-2xl'
           : 'bg-transparent'
-      }`}
+        }`}
       data-testid="landing-navbar"
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
@@ -73,7 +72,7 @@ function Navbar({ scrollY, menuOpen, setMenuOpen }: { scrollY: number; menuOpen:
             </svg>
           </div>
           <span className="font-display text-xl font-bold tracking-tight text-slate-900">
-            Riskalyzer
+            BreathSense
           </span>
         </Link>
 
@@ -85,13 +84,6 @@ function Navbar({ scrollY, menuOpen, setMenuOpen }: { scrollY: number; menuOpen:
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
-          <Link
-            to="/login"
-            className="rounded-full border border-white/50 bg-white/40 px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm backdrop-blur-sm transition hover:bg-white/65 hover:text-slate-900 hover:shadow-md"
-            data-testid="navbar-login-btn"
-          >
-            Sign in
-          </Link>
           <Link
             to="/login"
             className="rounded-full bg-gradient-to-r from-sky-600 to-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-sky-600/25 transition hover:from-sky-500 hover:to-indigo-500 hover:shadow-xl hover:shadow-sky-500/30"
@@ -172,7 +164,7 @@ function HeroSection() {
 
       <FadeIn delay={200}>
         <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg md:text-xl">
-          Riskalyzer combines real-time breath sensor data, air quality metrics, and AI analysis
+          BreathSense combines real-time breath sensor data, air quality metrics, and AI analysis
           to give you a personalized view of your health risk landscape.
         </p>
       </FadeIn>
@@ -215,7 +207,7 @@ function DashboardPreviewCard() {
     <div className="rounded-[1.75rem] border border-white/50 bg-white/30 p-4 shadow-[0_30px_80px_-12px_rgba(14,116,144,0.22),inset_0_1px_0_0_rgba(255,255,255,0.65)] backdrop-blur-2xl sm:p-6" data-testid="dashboard-preview">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <PreviewStatCard icon="heart" label="Life Expectancy" value="-12%" color="sky" />
-        <PreviewStatCard icon="clock" label="Years Left" value="-16%" color="indigo" />
+        <PreviewStatCard icon="clock" label="PM" value="-16%" color="indigo" />
         <PreviewStatCard icon="thermometer" label="Temperature" value="28°C" color="cyan" />
         <PreviewStatCard icon="wind" label="US AQI" value="119" color="violet" />
       </div>
@@ -400,7 +392,7 @@ function HowItWorksSection() {
               Simple Process
             </p>
             <h2 className="font-display mt-3 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-              How Riskalyzer{' '}
+              How BreathSense{' '}
               <span className="bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent">
                 Works
               </span>
@@ -430,10 +422,10 @@ function HowItWorksSection() {
 /* ──────────────────────── STATS ──────────────────────── */
 function StatsSection() {
   const stats = [
-    { value: '500K+', label: 'Health Risk Assessments' },
-    { value: '40 Years', label: 'Avg Life Expectancy Data' },
+    { value: '50+', label: 'Health Risk Assessments' },
+    { value: '-6.2%', label: 'Avg Life Expectancy Data' },
     { value: '150+ Cities', label: 'Real-time Air Quality' },
-    { value: '99.9%', label: 'Data Accuracy' },
+    { value: '90.9%', label: 'Data Accuracy' },
   ]
 
   return (
@@ -442,7 +434,7 @@ function StatsSection() {
         <div className="rounded-3xl border border-white/50 bg-gradient-to-br from-white/40 to-white/20 p-12 backdrop-blur-2xl sm:p-16">
           <FadeIn>
             <h2 className="font-display text-center text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-              Trusted by researchers and health{' '}
+              Soon to be trusted by researchers and health{' '}
               <span className="bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent">
                 professionals
               </span>
@@ -475,7 +467,7 @@ function CTASection() {
             Ready to understand your risk?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-sky-100/90">
-            Join Riskalyzer today and get personalized health risk insights powered by AI, real-time
+            Join BreathSense today and get personalized health risk insights powered by AI, real-time
             environmental data, and your own biometric signals.
           </p>
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
@@ -516,7 +508,7 @@ function Footer() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <span className="font-display text-lg font-bold text-slate-900">Riskalyzer</span>
+              <span className="font-display text-lg font-bold text-slate-900">BreathSense</span>
             </div>
             <p className="mt-3 text-sm leading-relaxed text-slate-600">
               AI-powered health risk assessment using breath sensors, AQI data, and personalized analysis.
@@ -565,7 +557,7 @@ function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/30 pt-8 sm:flex-row">
           <p className="text-xs text-slate-500">
-            &copy; {new Date().getFullYear()} Riskalyzer. All rights reserved. Not medical advice.
+            &copy; {new Date().getFullYear()} BreathSense. All rights reserved. Not medical advice.
           </p>
           <div className="flex gap-4">
             <SocialIcon label="Twitter">

@@ -89,13 +89,13 @@ export function Register({ initialProfile }: { initialProfile: UserProfile | nul
   return (
     <div className="relative min-h-svh overflow-x-hidden bg-gradient-to-b from-sky-400 via-sky-300 to-sky-100 font-sans text-slate-800 selection:bg-sky-500/30">
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        <div className="riskalyzer-cloud absolute -left-10 top-[8%] h-40 w-56 rounded-full bg-white/35 blur-3xl md:h-52 md:w-72" />
-        <div className="riskalyzer-cloud riskalyzer-cloud-delay absolute left-[35%] top-[4%] h-48 w-64 rounded-full bg-white/30 blur-3xl" />
+        <div className="BreathSense-cloud absolute -left-10 top-[8%] h-40 w-56 rounded-full bg-white/35 blur-3xl md:h-52 md:w-72" />
+        <div className="BreathSense-cloud BreathSense-cloud-delay absolute left-[35%] top-[4%] h-48 w-64 rounded-full bg-white/30 blur-3xl" />
         <div className="absolute bottom-[12%] left-[15%] h-36 w-96 rounded-full bg-sky-200/35 blur-3xl" />
       </div>
 
       <div className="relative z-10 mx-auto flex min-h-svh max-w-lg flex-col justify-center px-6 py-12">
-        <p className="font-display text-sm font-semibold tracking-wide text-sky-950/80">Riskalyzer</p>
+        <p className="font-display text-sm font-semibold tracking-wide text-sky-950/80">BreathSense</p>
         <h1 className="font-display mt-2 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
           {initialProfile ? 'Update your health profile' : 'Create your health profile'}
         </h1>
@@ -150,11 +150,10 @@ export function Register({ initialProfile }: { initialProfile: UserProfile | nul
               ).map(([value, label]) => (
                 <label
                   key={value}
-                  className={`cursor-pointer rounded-xl border px-4 py-2 text-sm font-medium transition ${
-                    sex === value
+                  className={`cursor-pointer rounded-xl border px-4 py-2 text-sm font-medium transition ${sex === value
                       ? 'border-sky-500/60 bg-white/70 text-sky-950 shadow-sm'
                       : 'border-white/50 bg-white/35 text-slate-600 hover:border-white/70 hover:bg-white/50'
-                  }`}
+                    }`}
                 >
                   <input
                     type="radio"
@@ -182,11 +181,10 @@ export function Register({ initialProfile }: { initialProfile: UserProfile | nul
                 ).map(([value, label]) => (
                   <label
                     key={value}
-                    className={`cursor-pointer rounded-xl border px-4 py-2.5 text-sm font-medium transition ${
-                      smokingStatus === value
+                    className={`cursor-pointer rounded-xl border px-4 py-2.5 text-sm font-medium transition ${smokingStatus === value
                         ? 'border-sky-500/60 bg-white/70 text-sky-950 shadow-sm'
                         : 'border-white/50 bg-white/35 text-slate-600 hover:border-white/70 hover:bg-white/50'
-                    }`}
+                      }`}
                   >
                     <input
                       type="radio"
@@ -200,7 +198,7 @@ export function Register({ initialProfile }: { initialProfile: UserProfile | nul
                 ))}
               </div>
             </fieldset>
-            
+
             <ToggleRow
               label="Family history of serious illness?"
               description="Placeholder flag for hereditary risk — refine with your clinician."
@@ -244,14 +242,12 @@ function ToggleRow({
         role="switch"
         aria-checked={checked}
         onClick={() => onChange(!checked)}
-        className={`relative h-7 w-12 shrink-0 rounded-full border border-white/40 shadow-inner transition ${
-          checked ? 'bg-sky-600' : 'bg-slate-300/80'
-        }`}
+        className={`relative h-7 w-12 shrink-0 rounded-full border border-white/40 shadow-inner transition ${checked ? 'bg-sky-600' : 'bg-slate-300/80'
+          }`}
       >
         <span
-          className={`absolute top-0.5 left-0.5 size-6 rounded-full bg-white shadow transition ${
-            checked ? 'translate-x-5' : 'translate-x-0'
-          }`}
+          className={`absolute top-0.5 left-0.5 size-6 rounded-full bg-white shadow transition ${checked ? 'translate-x-5' : 'translate-x-0'
+            }`}
         />
       </button>
     </div>

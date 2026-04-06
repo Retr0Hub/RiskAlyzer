@@ -43,12 +43,12 @@ export function Login() {
   return (
     <div className="relative min-h-svh overflow-x-hidden bg-gradient-to-b from-sky-400 via-sky-300 to-sky-100 font-sans text-slate-800">
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        <div className="riskalyzer-cloud absolute -left-10 top-[8%] h-40 w-56 rounded-full bg-white/35 blur-3xl md:h-52 md:w-72" />
-        <div className="riskalyzer-cloud riskalyzer-cloud-delay absolute left-[35%] top-[4%] h-48 w-64 rounded-full bg-white/30 blur-3xl" />
+        <div className="BreathSense-cloud absolute -left-10 top-[8%] h-40 w-56 rounded-full bg-white/35 blur-3xl md:h-52 md:w-72" />
+        <div className="BreathSense-cloud BreathSense-cloud-delay absolute left-[35%] top-[4%] h-48 w-64 rounded-full bg-white/30 blur-3xl" />
       </div>
 
       <div className="relative z-10 mx-auto flex min-h-svh max-w-md flex-col justify-center px-6 py-12">
-        <p className="font-display text-sm font-semibold tracking-wide text-sky-950/80">Riskalyzer</p>
+        <p className="font-display text-sm font-semibold tracking-wide text-sky-950/80">BreathSense</p>
         <h1 className="font-display mt-2 text-3xl font-semibold tracking-tight text-slate-900">
           {mode === 'signin' ? 'Welcome back' : 'Create account'}
         </h1>

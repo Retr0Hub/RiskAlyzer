@@ -19,7 +19,7 @@ body {
 }
 
 /* Soft “cloud” pulses — complements Tailwind layers on the page */
-@keyframes riskalyzer-float {
+@keyframes BreathSense-float {
   0%,
   100% {
     transform: translate(0, 0) scale(1);
@@ -31,11 +31,11 @@ body {
   }
 }
 
-.riskalyzer-cloud {
-  animation: riskalyzer-float 18s ease-in-out infinite;
+.BreathSense-cloud {
+  animation: BreathSense-float 18s ease-in-out infinite;
 }
 
-.riskalyzer-cloud-delay {
+.BreathSense-cloud-delay {
   animation-delay: -6s;
 }
 

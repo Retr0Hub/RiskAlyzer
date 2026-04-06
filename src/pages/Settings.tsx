@@ -409,13 +409,15 @@ export function Settings({ initialProfile }: { initialProfile: UserProfile | nul
                     </>
                   )}
 
-                  <button
-                    type="submit"
-                    disabled={busy}
-                    className="w-full rounded-xl bg-gradient-to-r from-sky-600 to-cyan-600 py-3.5 text-sm font-bold text-white shadow-lg transition enabled:hover:from-sky-500 enabled:hover:to-cyan-500 disabled:opacity-60 mt-6 border-t border-white/40 pt-6"
-                  >
-                    {busy ? 'Saving…' : 'Save Security Settings'}
-                  </button>
+                  <div className="mt-6 border-t border-white/40 pt-6">
+                    <button
+                      type="submit"
+                      disabled={busy}
+                      className="w-full rounded-xl bg-gradient-to-r from-sky-600 to-cyan-600 py-3.5 text-sm font-bold text-white shadow-lg transition enabled:hover:from-sky-500 enabled:hover:to-cyan-500 disabled:opacity-60"
+                    >
+                      {busy ? 'Saving…' : 'Save Security Settings'}
+                    </button>
+                  </div>
                 </div>
               )}
 

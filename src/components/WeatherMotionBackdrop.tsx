@@ -32,7 +32,7 @@ export function WeatherMotionBackdrop({
     >
       {(v === 'clear-day' || v === 'cloudy' || v === 'rain' || v === 'heavy-rain') && (
         <div
-          className="absolute -left-[10%] top-[12%] h-40 w-[55%] rounded-full bg-white/45 blur-3xl riskalyzer-cloud md:h-52"
+          className="absolute -left-[10%] top-[12%] h-40 w-[55%] rounded-full bg-white/45 blur-3xl BreathSense-cloud md:h-52"
           aria-hidden
         />
       )}
@@ -42,17 +42,17 @@ export function WeatherMotionBackdrop({
         v === 'snow' ||
         v === 'thunder' ||
         v === 'fog') && (
-        <>
-          <div
-            className="absolute left-[8%] top-[22%] h-48 w-[65%] rounded-full bg-white/35 blur-3xl riskalyzer-cloud-delay"
-            aria-hidden
-          />
-          <div
-            className="absolute right-[-8%] top-[8%] h-44 w-[50%] rounded-full bg-white/30 blur-3xl riskalyzer-cloud"
-            aria-hidden
-          />
-        </>
-      )}
+          <>
+            <div
+              className="absolute left-[8%] top-[22%] h-48 w-[65%] rounded-full bg-white/35 blur-3xl BreathSense-cloud-delay"
+              aria-hidden
+            />
+            <div
+              className="absolute right-[-8%] top-[8%] h-44 w-[50%] rounded-full bg-white/30 blur-3xl BreathSense-cloud"
+              aria-hidden
+            />
+          </>
+        )}
 
       {v === 'clear-day' && (
         <div

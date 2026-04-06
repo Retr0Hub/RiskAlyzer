@@ -25,7 +25,7 @@ export function subscribeUserProfile(
       onNext(parseUserProfileRecord(snap.data()))
     },
     (err) => {
-      console.error('[Riskalyzer] Firestore profile listener:', err)
+      console.error('[BreathSense] Firestore profile listener:', err)
       onNext(null)
     }
   )

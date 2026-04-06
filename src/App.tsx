@@ -43,7 +43,7 @@ function AppRoutes() {
 
   // If profile loading failed, log and direct to register
   if (profileError) {
-    console.error('[Riskalyzer] Profile load error:', profileError)
+    console.error('[BreathSense] Profile load error:', profileError)
   }
 
   // If profile exists, go directly to dashboard
